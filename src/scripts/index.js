@@ -1,3 +1,6 @@
+import { baseUrl, repositoriesQuantity } from "/src/scripts/variables.js"
+
+
 document.getElementById('btn-search').addEventListener('click', () => {
     const userName = document.getElementById('input-search').value
     getUserProfile(userName)
@@ -16,12 +19,12 @@ document.getElementById('input-search').addEventListener('keyup', (e) =>{
 
 
 async function user(userName){
-    let response = await fetch(`https://api.github.com/users/${userName}`);
+    let response = await fetch(`${baseUrl}/${userName}`);
     return await response.json();
 }
 
 async function repos(userName){
-    let response = await fetch(`https://api.github.com/users/${userName}/repos`);
+    let response = await fetch(`${baseUrl}/${userName}/repos?per_page=${repositoriesQuantity}`);
     return await response.json();
 }
 
