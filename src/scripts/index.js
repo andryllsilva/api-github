@@ -1,10 +1,15 @@
-import { baseUrl, repositoriesQuantity } from "/src/scripts/variables.js"
-
+import { getUser } from "/src/scripts/services/user.js"
+import { getRepositories } from "/src/scripts/services/repositories.js"
+import { user } from "/src/scripts/objects/user.js"
+import { screen } from "/src/scripts/objects/screen.js"
 
 document.getElementById('btn-search').addEventListener('click', () => {
     const userName = document.getElementById('input-search').value
-    getUserProfile(userName)
+    if(validateEmptyInput(userName)) return
+    getUserData(userName)
 })
+
+
 
 document.getElementById('input-search').addEventListener('keyup', (e) =>{
     const userName = e.target.value
@@ -12,54 +17,32 @@ document.getElementById('input-search').addEventListener('keyup', (e) =>{
     const isEnterKeyPressed =  key === 13
 
     if(isEnterKeyPressed){
-        getUserProfile(userName)
+        if(validateEmptyInput(userName)) return
+        getUserData(userName)
     }
 })
 
+async function getUserData(userName){
+    const userResponse = await getUser(userName)
+    const repositoriesResponse = await getRepositories(userName)
 
+    if(userResponse.message === "Not Found"){
+        screen.renderNotFound()
+        return
+    }
+        
 
-async function user(userName){
-    let response = await fetch(`${baseUrl}/${userName}`);
-    return await response.json();
+    user.setInfo(userResponse)
+    user.setRepositories(repositoriesResponse)
+    screen.renderUser(user)
 }
 
-async function repos(userName){
-    let response = await fetch(`${baseUrl}/${userName}/repos?per_page=${repositoriesQuantity}`);
-    return await response.json();
+function validateEmptyInput(userName){
+    if(userName.length === 0){
+        alert('Preencha o campo com o nome do usuário do GitHub')
+        return true
+    }
 }
-
-
-function getUserProfile(userName){
-
-    user(userName).then(userdata => {
-        let userInfo = `<img src="${userdata.avatar_url}" alt="foto de perfil do usuario" />
-                        <div class="info">
-                            <div class="data">
-                                <h1>${userdata.name ?? 'Não possui nome cadastrado 😥'} </h1>
-                                <p> ${userdata.bio ?? "Não possui bio cadastrada 😥"} </p>
-                            </div>
-                        </div>`
-            
-        document.querySelector(".profile-data").innerHTML = userInfo
-
-        getUserRepositories(userName)
-    })
-}
-
-function getUserRepositories(userName){
-    repos(userName).then(reposData =>{
-        let userRepo = ""
-        reposData.forEach(repo => {
-            userRepo += `<li><a href="${repo.html_url}" target="_blank">${repo.name}</a></li>`
-        })
-
-        document.querySelector('.profile-data').innerHTML += `  <div class="repositories section">
-                                                                    <h2>Repositórios</h2>
-                                                                    <ul>${userRepo}</ul>
-                                                                </div>`
-    } )
-}
-
 
 
 

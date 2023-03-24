@@ -107,7 +107,7 @@ main {
 .container .profile-data .info img{
   width: 50%;
   border-radius: 50%;
-  border: 10px solid hotpink;
+  border: 6px solid rgb(112, 22, 185);
 }
 
 .container .profile-data .info h1{
@@ -145,7 +145,7 @@ main {
 }
 
 .container .profile-data .repositories ul li a:hover{
-  background-color:hotpink;
+  background-color:rgb(112, 22, 185);
   color: #fff
 }
 
