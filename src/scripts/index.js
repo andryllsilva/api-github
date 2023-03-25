@@ -24,6 +24,7 @@ document.getElementById('input-search').addEventListener('keyup', (e) =>{
 
 async function getUserData(userName){
     const userResponse = await getUser(userName)
+    console.log(userResponse)
     const repositoriesResponse = await getRepositories(userName)
 
     if(userResponse.message === "Not Found"){

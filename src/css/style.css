@@ -170,6 +170,17 @@ main {
   }
 }
 
+.profile-data .info .container-midia{
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.profile-data .info .container-midia #follow-bold{
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .container header #input-search,
   .container header #btn-search
